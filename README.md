@@ -2,7 +2,7 @@
 
 A React/Next app for playing Spotify music quiz. Great for use with friends on a party.
 
-**Warning:** Unfortunately, Spotify does not allow the creation of Spotify games via their [Developer policy](https://developer.spotify.com/policy/). Thus, we cannot provide public access to the music-quiz instance running on quiz.josholaus.com (you will receive an error on login)
+**Warning:** Unfortunately, Spotify does not allow the creation of Spotify games via their [Developer policy](https://developer.spotify.com/policy/). Thus, we cannot provide public access to the music-quiz instance running on quiz.konga.dev (you will receive an error on login)
 
 If you want to use this app anyway (thank you!) you can register your own Spotify application use the provided Docker image to host music-quiz yourself.
 
@@ -17,13 +17,13 @@ If you want to use this app anyway (thank you!) you can register your own Spotif
 
 ## Installation
 
-We offer a pre-built Docker image through [GitHub's package registry](https://github.com/josholaus/music-quiz/packages/).
+We offer a pre-built Docker image through [GitHub's package registry](https://github.com/leikonga/music-quiz/packages/).
 
 **Docker Command**
 
 ```shell
-docker pull ghcr.io/josholaus/music-quiz/quiz:latest
-docker run -d -p 3000:3000 josholaus/music-quiz/quiz:latest
+docker pull ghcr.io/leikonga/music-quiz/quiz:latest
+docker run -d -p 3000:3000 leikonga/music-quiz/quiz:latest
 ```
 
 **docker-compose**
@@ -34,7 +34,7 @@ version: '2'
 services:
   musicquiz:
     container_name: musicquiz
-    image: ghcr.io/josholaus/music-quiz/quiz:latest
+    image: ghcr.io/leikonga/music-quiz/quiz:latest
     ports:
       - '3000'
     environment:
