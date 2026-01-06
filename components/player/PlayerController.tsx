@@ -1,6 +1,7 @@
 import { usePlayer } from "./PlayerContext";
 import SpotifyClient from "@lib/spotifyClient";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface PlayerControllerProps {
   player: Spotify.Player;
@@ -9,12 +10,19 @@ interface PlayerControllerProps {
   spotifyClient: SpotifyClient;
 }
 
-var toggling = false;
-var isChanging = false;
+let toggling = false;
+let isChanging = false;
 
 export default function PlayerController(props: PlayerControllerProps) {
   const router = useRouter();
   const { startTime, spotifyTracks } = usePlayer();
+  const [volume, setVolume] = useState(0.5);
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    props.player.setVolume(newVolume);
+  };
 
   const togglePlay = async () => {
     if (toggling) {
@@ -114,6 +122,17 @@ export default function PlayerController(props: PlayerControllerProps) {
         >
           <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" />
         </svg>
+      </div>
+      <div className="flex items-center ml-4">
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={volume}
+          onChange={handleVolumeChange}
+          className="ml-2 w-24 h-1 accent-zinc-600 cursor-pointer"
+        />
       </div>
     </div>
   );
