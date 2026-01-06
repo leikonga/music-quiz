@@ -4,6 +4,17 @@ const getPlaylist = async (req: NextApiRequest, res: NextApiResponse) => {
   const { playlistId } = req.query;
   const { accessToken } = req.body;
 
+  const playlistIdStr = Array.isArray(playlistId) ? playlistId[0] : playlistId;
+  const isValidPlaylistId =
+    typeof playlistIdStr === "string" &&
+    /^[A-Za-z0-9]+$/.test(playlistIdStr) &&
+    playlistIdStr.length <= 128;
+
+  if (!isValidPlaylistId) {
+    res.status(400).json({ error: "Invalid playlistId" });
+    return;
+  }
+
   const getMorePlaylistTracks = async (
     url: string,
   ): Promise<SpotifyApi.PlaylistTrackObject[]> => {
@@ -22,7 +33,7 @@ const getPlaylist = async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const response = await fetch(
-    `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    `https://api.spotify.com/v1/playlists/${playlistIdStr}/tracks`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
