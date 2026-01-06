@@ -1,1 +1,1 @@
-export { LoadingComponent } from './LoadingComponent'
+export { LoadingComponent } from "./LoadingComponent";

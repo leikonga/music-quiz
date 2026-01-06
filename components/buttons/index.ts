@@ -1,2 +1,2 @@
-export { SpotifyButton } from './SpotifyButton'
-export { GeneralButton } from './GeneralButton'
+export { SpotifyButton } from "./SpotifyButton";
+export { GeneralButton } from "./GeneralButton";

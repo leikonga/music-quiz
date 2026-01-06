@@ -29,14 +29,14 @@ docker run -d -p 3000:3000 leikonga/music-quiz/quiz:latest
 **docker-compose**
 
 ```yml
-version: '2'
+version: "2"
 
 services:
   musicquiz:
     container_name: musicquiz
     image: ghcr.io/leikonga/music-quiz/quiz:latest
     ports:
-      - '3000'
+      - "3000"
     environment:
       CLIENT_ID: <your client ID>
       CLIENT_SECRET: <your client secret>

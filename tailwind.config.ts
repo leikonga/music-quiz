@@ -1,9 +1,9 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-}
-export default config
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+export default config;

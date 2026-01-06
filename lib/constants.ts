@@ -1,3 +1,3 @@
-const DEFAULT_OFFSET_S = 30
+const DEFAULT_OFFSET_S = 30;
 
-export { DEFAULT_OFFSET_S }
+export { DEFAULT_OFFSET_S };
