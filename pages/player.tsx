@@ -25,15 +25,18 @@ const Player: NextPage = () => {
       return;
     }
     const interval = setInterval(async () => {
-      const params = new URLSearchParams({
-        refreshToken,
-      });
-      const { access_token, refresh_token } = await fetch(
-        `/api/refresh_token?${params.toString()}`,
-      ).then((res) => res.json());
-      setAccessToken(access_token);
-      setRefreshToken(refresh_token);
-    }, 3600 * 1000);
+      const params = new URLSearchParams({ refreshToken });
+      const res = await fetch(`/api/refresh_token?${params.toString()}`);
+      const data = await res.json();
+
+      if (data.error || !data.access_token) {
+        window.location.href = "/api/login";
+        return;
+      }
+
+      setAccessToken(data.access_token);
+      setRefreshToken(data.refresh_token);
+    }, 3000 * 1000); // 50 minutes
     return () => {
       clearInterval(interval);
     };
