@@ -1,5 +1,3 @@
-const BASE_URL = 'https://api.spotify.com/v1'
-
 class SpotifyClient {
     constructor(private accessToken: string) {}
 
@@ -35,12 +33,6 @@ class SpotifyClient {
                 accessToken: this.accessToken,
             }),
         }).then((res) => res.json())
-    }
-
-    private async getMorePlaylistTracks(url: string): Promise<SpotifyApi.PlaylistTrackObject[]> {
-        // This method is no longer used, as the logic is now handled by the API route.
-        // It's kept here to avoid breaking the interface, but it should be removed in a future refactor.
-        return Promise.resolve([])
     }
 }
 
