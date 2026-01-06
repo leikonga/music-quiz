@@ -14,9 +14,9 @@ export default function PlayerMetadata(props: PlayerMetadataProps) {
   const album = revealed ? props.currentTrack.album.name : "?";
   return (
     <div className="text-center">
-      <p className="font-bold text-xl">{title}</p>
-      <p className="font-semibold">{artist}</p>
-      <p className="text-sky-500">{album}</p>
+      <p className="font-bold text-2xl">{title}</p>
+      <p className="font-semibold text-lg">{artist}</p>
+      <p className="text-sky-500 text-base">{album}</p>
     </div>
   );
 }

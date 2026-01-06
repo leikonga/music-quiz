@@ -9,8 +9,7 @@ const Layout = (props: { children: React.ReactNode }) => {
       <div
         className={`flex items-center justify-center h-screen w-screen ${revealed ? "" : "bg-black"}`}
       >
-        <div className="flex flex-col items-center justify-center md:mx-16 lg:mx-96 w-full h-full md:h-max rounded-none md:rounded-xl p-10 bg-gray-100 text-center shadow-xl">
-          <main>{props.children}</main>
+                        <div className="flex flex-col items-center justify-center max-w-4xl mx-auto w-full h-full md:h-max rounded-none md:rounded-xl p-10 bg-gray-100 text-center shadow-xl">          <main>{props.children}</main>
         </div>
       </div>
       <div
