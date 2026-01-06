@@ -6,10 +6,9 @@ import { LoadingComponent } from '@components/misc'
 import SpotifyClient from '@lib/spotifyClient'
 import StartTimeSlider from './StartTimeSlider'
 import { DEFAULT_OFFSET_S } from '@lib/constants'
-import { useGlobalContext } from '@components/context'
+import { usePlayer } from '@components/player/PlayerContext'
 
 interface PlaylistInputProps {
-    setSpotifyTracks: (tracks: SpotifyApi.TrackObjectFull[]) => void
     accessToken: string
 }
 
@@ -17,11 +16,7 @@ export default function PlaylistInput(props: PlaylistInputProps) {
     const [value, setValue] = useState('')
     const [loading, setLoading] = useState(false)
     const [startTimeLocal, setStartTimeLocal] = useState(DEFAULT_OFFSET_S)
-    const {
-        setStartTime,
-    }: {
-        setStartTime: (startTime: number) => void
-    } = useGlobalContext()
+    const { setStartTime, setSpotifyTracks } = usePlayer()
     const spotifyClient = new SpotifyClient(props.accessToken)
 
     useEffect(() => {
@@ -97,7 +92,7 @@ export default function PlaylistInput(props: PlaylistInputProps) {
             return
         }
         setStartTime(startTimeLocal * 1000)
-        props.setSpotifyTracks(uniqueTracks)
+        setSpotifyTracks(uniqueTracks)
     }
 
     if (loading) {

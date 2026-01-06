@@ -1,11 +1,11 @@
-import { useGlobalContext } from '@components/context'
+import { usePlayer } from './PlayerContext'
 
 interface PlayerMetadataProps {
     currentTrack: Spotify.Track
 }
 
 export default function PlayerMetadata(props: PlayerMetadataProps) {
-    const { revealed } = useGlobalContext()
+    const { revealed } = usePlayer()
 
     const title = revealed ? props.currentTrack.name : '?'
     const artist = revealed ? props.currentTrack.artists.map((artist) => artist.name).join(', ') : '?'

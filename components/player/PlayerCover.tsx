@@ -1,17 +1,11 @@
-import { useGlobalContext } from '@components/context'
+import { usePlayer } from './PlayerContext'
 
 interface PlayerCoverProps {
     currentTrack: Spotify.Track
 }
 
 export default function PlayerCover(props: PlayerCoverProps) {
-    const {
-        revealed,
-        setRevealed,
-    }: {
-        revealed: boolean
-        setRevealed: (revealed: boolean) => void
-    } = useGlobalContext()
+    const { revealed, setRevealed } = usePlayer()
     const coverUrl = !props.currentTrack ? '/assets/placeholder.png' : props.currentTrack.album.images[0].url
     const questionUrl = '/assets/question.png'
 

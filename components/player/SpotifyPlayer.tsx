@@ -1,15 +1,14 @@
 import { GeneralButton } from '@components/buttons'
-import { useGlobalContext } from '@components/context'
 import { LoadingComponent } from '@components/misc'
 import SpotifyClient from '@lib/spotifyClient'
 import { useEffect, useRef, useState } from 'react'
+import { usePlayer } from './PlayerContext'
 import PlayerError from './PlayerError'
 import PlayerParent from './PlayerParent'
 import PlayerTransferred from './PlayerTransferred'
 
 interface SpotifyPlayerProps {
     accessToken: string
-    spotifyTracks: SpotifyApi.TrackObjectFull[]
 }
 
 // The spotify-web-playback-sdk typings are out of date (haven't been updated in 1 year+) ... there are new functions
@@ -17,7 +16,7 @@ type SpotifyOutOfBetaPolyfill = {
     activateElement: () => Promise<void>
 }
 
-export function SpotifyPlayer({ accessToken, spotifyTracks }: SpotifyPlayerProps) {
+export function SpotifyPlayer({ accessToken }: SpotifyPlayerProps) {
     const [player, setPlayer] = useState<(Spotify.Player & SpotifyOutOfBetaPolyfill) | null>(null)
 
     const [ready, setReady] = useState<boolean>(false)
@@ -31,15 +30,7 @@ export function SpotifyPlayer({ accessToken, spotifyTracks }: SpotifyPlayerProps
 
     const spotifyClient = new SpotifyClient(accessToken)
 
-    const {
-        setCurrentTrack,
-        setRevealed,
-        startTime,
-    }: {
-        setCurrentTrack: (track: Spotify.Track | null) => void
-        setRevealed: (revealed: boolean) => void
-        startTime: number
-    } = useGlobalContext()
+    const { setCurrentTrack, setRevealed, startTime, spotifyTracks } = usePlayer()
 
     useEffect(() => {
         playerStateRef.current = playerState
@@ -80,8 +71,11 @@ export function SpotifyPlayer({ accessToken, spotifyTracks }: SpotifyPlayerProps
                 console.log('Player State Changed', state)
                 if (state) {
                     // Track has changed, hide track info
-                    if (playerStateRef.current?.track_window.current_track && state.track_window.current_track &&
-                        playerStateRef.current?.track_window.current_track.id != state.track_window.current_track.id) {
+                    if (
+                        playerStateRef.current?.track_window.current_track &&
+                        state.track_window.current_track &&
+                        playerStateRef.current?.track_window.current_track.id != state.track_window.current_track.id
+                    ) {
                         setRevealed(false)
                     }
                     setPlayerState(state)
@@ -148,7 +142,6 @@ export function SpotifyPlayer({ accessToken, spotifyTracks }: SpotifyPlayerProps
             player={player}
             playerState={playerState}
             deviceId={deviceId ?? ''}
-            spotifyTracks={spotifyTracks}
             spotifyClient={spotifyClient}
         />
     )

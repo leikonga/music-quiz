@@ -1,14 +1,8 @@
 import React from 'react'
-import { useGlobalContext } from './context'
+import { usePlayer } from './player/PlayerContext'
 
 const Layout = (props: { children: React.ReactNode }) => {
-    const {
-        revealed,
-        currentTrack,
-    }: {
-        revealed: boolean
-        currentTrack: Spotify.Track | null
-    } = useGlobalContext()
+    const { revealed, currentTrack } = usePlayer()
 
     return (
         <div className="flex items-center justify-center w-screen h-screen">

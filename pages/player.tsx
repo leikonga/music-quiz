@@ -1,26 +1,26 @@
-import { NextPage } from 'next'
-
+import { useAuth } from '@components/auth/AuthContext'
 import { Title } from '@components/headings'
+import { usePlayer } from '@components/player/PlayerContext'
 import { SpotifyPlayer } from '@components/player/SpotifyPlayer'
 import { PlaylistInput } from '@components/playlists'
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-interface PlayerProps {
-    access_token?: string
-    refresh_token?: string
-}
-
-const Player: NextPage = ({ access_token, refresh_token }: PlayerProps) => {
+const Player: NextPage = () => {
     const router = useRouter()
+    const { accessToken, setAccessToken, refreshToken, setRefreshToken } = useAuth()
+    const { spotifyTracks, setSpotifyTracks } = usePlayer()
 
-    const [accessToken, setAccessToken] = useState(access_token)
-    const [refreshToken, setRefreshToken] = useState(refresh_token)
-    const [spotifyTracks, setSpotifyTracks] = useState<SpotifyApi.TrackObjectFull[]>([])
+    useEffect(() => {
+        if (router.query.access_token && router.query.refresh_token) {
+            setAccessToken(router.query.access_token as string)
+            setRefreshToken(router.query.refresh_token as string)
+        }
+    }, [router.query, setAccessToken, setRefreshToken])
 
     useEffect(() => {
         if (!refreshToken) {
-            console.error('Did not receive refresh token, cannot refresh')
             return
         }
         const interval = setInterval(async () => {
@@ -36,18 +36,19 @@ const Player: NextPage = ({ access_token, refresh_token }: PlayerProps) => {
         return () => {
             clearInterval(interval)
         }
-    }, [refreshToken])
+    }, [refreshToken, setAccessToken, setRefreshToken])
 
     useEffect(() => {
-        // Update the accessToken in the path name so the page still works on reload
-        const { pathname, query } = router
-        query.access_token = accessToken
-        router.replace({
-            pathname,
-            query: {
-                ...query,
-            },
-        })
+        if (accessToken) {
+            const { pathname, query } = router
+            query.access_token = accessToken
+            router.replace({
+                pathname,
+                query: {
+                    ...query,
+                },
+            })
+        }
     }, [accessToken, router])
 
     if (!accessToken || !refreshToken) {
@@ -60,19 +61,11 @@ const Player: NextPage = ({ access_token, refresh_token }: PlayerProps) => {
     }
 
     if (spotifyTracks.length === 0) {
-        return (
-            <PlaylistInput
-                setSpotifyTracks={(tracks: SpotifyApi.TrackObjectFull[]) => setSpotifyTracks(tracks)}
-                accessToken={accessToken}
-            />
-        )
+        return <PlaylistInput accessToken={accessToken} />
     }
 
-    return <SpotifyPlayer accessToken={accessToken.toString()} spotifyTracks={spotifyTracks} />
-}
-
-Player.getInitialProps = ({ query }: any) => {
-    return query
+    return <SpotifyPlayer accessToken={accessToken.toString()} />
 }
 
 export default Player
+

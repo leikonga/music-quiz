@@ -11,41 +11,36 @@ class SpotifyClient {
     }
 
     public async playTrack(track: SpotifyApi.TrackObjectFull, deviceId: string, offset?: number) {
-        return fetch(`${BASE_URL}/me/player/play?device_id=${deviceId}`, {
-            method: 'PUT',
+        return fetch(`/api/player/play`, {
+            method: 'POST',
             headers: {
-                Authorization: `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                uris: [track.uri],
-                position_ms: offset ?? 0,
+                trackUri: track.uri,
+                deviceId,
+                positionMs: offset ?? 0,
+                accessToken: this.accessToken,
             }),
         })
     }
 
     public async getPlaylistTracks(playlistId: string): Promise<SpotifyApi.PlaylistTrackObject[]> {
-        const res = await fetch(`${BASE_URL}/playlists/${playlistId}/tracks`, {
+        return fetch(`/api/playlists/${playlistId}`, {
+            method: 'POST',
             headers: {
-                Authorization: `Bearer ${this.accessToken}`,
+                'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                accessToken: this.accessToken,
+            }),
         }).then((res) => res.json())
-        if (res.next) {
-            return [...res.items, ...(await this.getMorePlaylistTracks(res.next))]
-        }
-        return res.items
     }
 
     private async getMorePlaylistTracks(url: string): Promise<SpotifyApi.PlaylistTrackObject[]> {
-        const res = await fetch(url, {
-            headers: {
-                Authorization: `Bearer ${this.accessToken}`,
-            },
-        }).then((res) => res.json())
-        if (res.next) {
-            return [...res.items, ...(await this.getMorePlaylistTracks(res.next))]
-        }
-        return res.items
+        // This method is no longer used, as the logic is now handled by the API route.
+        // It's kept here to avoid breaking the interface, but it should be removed in a future refactor.
+        return Promise.resolve([])
     }
 }
 

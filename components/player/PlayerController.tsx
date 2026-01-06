@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@components/context'
+import { usePlayer } from './PlayerContext'
 import SpotifyClient from '@lib/spotifyClient'
 import { useRouter } from 'next/router'
 
@@ -7,7 +7,6 @@ interface PlayerControllerProps {
     playerState: Spotify.PlaybackState
     deviceId: string
     spotifyClient: SpotifyClient
-    spotifyTracks: SpotifyApi.TrackObjectFull[]
 }
 
 var toggling = false
@@ -15,7 +14,7 @@ var isChanging = false
 
 export default function PlayerController(props: PlayerControllerProps) {
     const router = useRouter()
-    const { startTime } = useGlobalContext()
+    const { startTime, spotifyTracks } = usePlayer()
 
     const togglePlay = async () => {
         if (toggling) {
@@ -35,11 +34,11 @@ export default function PlayerController(props: PlayerControllerProps) {
             return
         }
         isChanging = true
-        if (props.spotifyTracks.length == 0) {
+        if (spotifyTracks.length == 0) {
             router.reload()
             return
         }
-        await props.spotifyClient.playRandomTrack(props.spotifyTracks, props.deviceId, startTime)
+        await props.spotifyClient.playRandomTrack(spotifyTracks, props.deviceId, startTime)
         isChanging = false
     }
 
