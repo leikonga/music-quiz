@@ -109,6 +109,7 @@ export function SpotifyPlayer({ accessToken, spotifyTracks }: SpotifyPlayerProps
         return () => {
             document.body.removeChild(scriptTag)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (restricted) {

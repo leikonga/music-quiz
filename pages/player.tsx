@@ -36,7 +36,7 @@ const Player: NextPage = ({ access_token, refresh_token }: PlayerProps) => {
         return () => {
             clearInterval(interval)
         }
-    }, [])
+    }, [refreshToken])
 
     useEffect(() => {
         // Update the accessToken in the path name so the page still works on reload
@@ -48,7 +48,7 @@ const Player: NextPage = ({ access_token, refresh_token }: PlayerProps) => {
                 ...query,
             },
         })
-    }, [accessToken])
+    }, [accessToken, router])
 
     if (!accessToken || !refreshToken) {
         return (
