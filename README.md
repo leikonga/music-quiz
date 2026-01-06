@@ -1,50 +1,39 @@
 # music-quiz
 
-A React/Next app for playing Spotify music quiz. Great for use with friends on a party.
+A React/Next app for playing Spotify music quiz. Great for use with friends at a party.
 
-**Warning:** Unfortunately, Spotify does not allow the creation of Spotify games via their [Developer policy](https://developer.spotify.com/policy/). Thus, we cannot provide public access to the music-quiz instance running on quiz.konga.dev (you will receive an error on login)
+**Warning:** Unfortunately, Spotify does not allow the creation of Spotify games via
+their [Developer policy](https://developer.spotify.com/policy/). Thus, we cannot provide public access to the music-quiz
+instance running on quiz.konga.dev (you will receive an error on login)
 
-If you want to use this app anyway (thank you!) you can register your own Spotify application use the provided Docker image to host music-quiz yourself.
+If you want to use this app anyway, you can register your own Spotify application and use the provided Docker image to
+host music-quiz yourself.
 
-## Creating a Spotify application
+## Getting Started
 
-1. Head over to [developer.spotify.com](https://developer.spotify.com/dashboard/applications) and log in.
-2. Click on "Create an app"
-3. Enter a name and a description, agree to the ToS and click "Create"
-4. Write down the Client ID and Client Secret (hidden behind the button "Show Client Secret") — you will need it later
-5. Click on "Edit Settings" and add `https://<your host>/api/callback` as a redirect URI
-6. (optional) Invite your friends to use the app by adding their Spotify email in "Users and Access"
+This project is not publicly accessible and must be self-hosted. To run it, you will need a Spotify Developer
+application.
 
-## Installation
+1. **Create a Spotify Application**
+    * Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications) and log in.
+    * Click on **"Create an app"**.
+    * Enter a name and description, then click **"Create"**.
+    * Click **"Edit Settings"** and add `http://localhost:3000/api/callback` as a Redirect URI.
+    * Note down your **Client ID** and **Client Secret**.
 
-We offer a pre-built Docker image through [GitHub's package registry](https://github.com/leikonga/music-quiz/packages/).
+2. **Set Up Your Environment**
+    * Clone the repository: `git clone https://github.com/leikonga/music-quiz.git`
+    * Navigate into the project directory: `cd music-quiz`
+    * Create a local environment file by copying the example: `cp .env.example .env`
+    * Open the `.env` file and fill in the `CLIENT_ID` and `CLIENT_SECRET` you got from the Spotify dashboard.
 
-**Docker Command**
+3. **Install & Run**
+    * Install dependencies using pnpm: `pnpm install`
+    * Run the development server: `pnpm dev`
+    * Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-```shell
-docker pull ghcr.io/leikonga/music-quiz/quiz:latest
-docker run -d -p 3000:3000 leikonga/music-quiz/quiz:latest
-```
-
-**docker-compose**
-
-```yml
-version: "2"
-
-services:
-  musicquiz:
-    container_name: musicquiz
-    image: ghcr.io/leikonga/music-quiz/quiz:latest
-    ports:
-      - "3000"
-    environment:
-      CLIENT_ID: <your client ID>
-      CLIENT_SECRET: <your client secret>
-      REDIRECT_URI: https://<your host>/api/callback
-    restart: always
-```
-
-... and give it a `docker-compose up -d`
+If you plan on hosting the app on a website, make sure to also add `https://<your-domain>/api/callback` as a Redirect
+URI.
 
 ## License
 
