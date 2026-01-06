@@ -3,6 +3,7 @@ import PlayerController from "./PlayerController";
 import PlayerCover from "./PlayerCover";
 import PlayerMetadata from "./PlayerMetadata";
 import PlayerProgress from "./PlayerProgress";
+import PlayerVolume from "./PlayerVolume";
 import { usePlayer } from "./PlayerContext";
 
 interface PlayerParentProps {
@@ -31,7 +32,12 @@ export default function PlayerParent(props: PlayerParentProps) {
             playerState={props.playerState}
             player={props.player}
           />
-          <p className="text-xs">songs left: {spotifyTracks.length}</p>
+          <PlayerVolume player={props.player} />
+          <p className="text-xs text-center mt-3">
+            <span className="bg-zinc-100 rounded-full px-3 py-1">
+              {spotifyTracks.length} songs left
+            </span>
+          </p>
         </div>
         <PlayerCover
           currentTrack={props.playerState.track_window.current_track}

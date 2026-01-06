@@ -11,7 +11,7 @@ const Player: NextPage = () => {
   const router = useRouter();
   const { accessToken, setAccessToken, refreshToken, setRefreshToken } =
     useAuth();
-  const { spotifyTracks, setSpotifyTracks } = usePlayer();
+  const { spotifyTracks } = usePlayer();
 
   useEffect(() => {
     if (router.query.access_token && router.query.refresh_token) {

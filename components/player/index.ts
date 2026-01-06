@@ -5,5 +5,6 @@ export { default as PlayerError } from "./PlayerError";
 export { default as PlayerMetadata } from "./PlayerMetadata";
 export { default as PlayerProgress } from "./PlayerProgress";
 export { default as PlayerTransferred } from "./PlayerTransferred";
+export { default as PlayerVolume } from "./PlayerVolume";
 export * from "./SpotifyPlayer";
 export * from "./PlayerContext";

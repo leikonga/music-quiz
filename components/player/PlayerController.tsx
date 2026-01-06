@@ -1,8 +1,12 @@
 import { usePlayer } from "./PlayerContext";
 import SpotifyClient from "@lib/spotifyClient";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { SkipBack, PauseCircle, PlayCircle, SkipForward, Volume2 } from "lucide-react";
+import {
+  CircleArrowLeft,
+  CircleArrowRight,
+  PauseCircle,
+  PlayCircle,
+} from "lucide-react";
 
 interface PlayerControllerProps {
   player: Spotify.Player;
@@ -17,13 +21,6 @@ let isChanging = false;
 export default function PlayerController(props: PlayerControllerProps) {
   const router = useRouter();
   const { startTime, spotifyTracks } = usePlayer();
-  const [volume, setVolume] = useState(0.5);
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    props.player.setVolume(newVolume);
-  };
 
   const togglePlay = async () => {
     if (toggling) {
@@ -59,46 +56,56 @@ export default function PlayerController(props: PlayerControllerProps) {
     return;
   };
 
+  const buttonBase =
+    "mx-1 px-2 cursor-pointer transition-transform ease-in-out focus:outline-none focus:ring-2 focus:ring-zinc-400 rounded-full";
+
   return (
     <div className="flex flex-row items-center justify-center mt-4 mb-2 text-black">
       <div
-        className="mx-1 px-2 text-zinc-500 cursor-not-allowed"
+        className={`${buttonBase} text-zinc-500 cursor-not-allowed`}
         onClick={() => previous()}
+        role="button"
+        tabIndex={0}
+        title="Previous (disabled)"
+        aria-label="Previous track (disabled)"
       >
-        <SkipBack className="h-10 w-10" />
+        <CircleArrowLeft className="h-10 w-10" />
       </div>
       {!props.playerState.paused ? (
         <div
-          className="mx-1 px-2 hover:text-zinc-800 cursor-pointer transition ease-in-out"
+          className={`${buttonBase} hover:text-zinc-800 hover:scale-110`}
           onClick={() => togglePlay()}
+          onKeyDown={(e) => e.key === "Enter" && togglePlay()}
+          role="button"
+          tabIndex={0}
+          title="Pause"
+          aria-label="Pause"
         >
           <PauseCircle className="h-10 w-10" />
         </div>
       ) : (
         <div
-          className="mx-1 px-2 hover:text-zinc-800 cursor-pointer transition ease-in-out"
+          className={`${buttonBase} hover:text-zinc-800 hover:scale-110`}
           onClick={() => togglePlay()}
+          onKeyDown={(e) => e.key === "Enter" && togglePlay()}
+          role="button"
+          tabIndex={0}
+          title="Play"
+          aria-label="Play"
         >
           <PlayCircle className="h-10 w-10" />
         </div>
       )}
       <div
-        className="mx-1 px-2 hover:text-zinc-800 cursor-pointer transition ease-in-out"
+        className={`${buttonBase} hover:text-zinc-800 hover:scale-110`}
         onClick={() => next()}
+        onKeyDown={(e) => e.key === "Enter" && next()}
+        role="button"
+        tabIndex={0}
+        title="Next"
+        aria-label="Next track"
       >
-        <SkipForward className="h-10 w-10" />
-      </div>
-      <div className="flex items-center ml-4">
-        <Volume2 className="h-5 w-5 text-zinc-600" />
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="ml-2 w-24 h-1 accent-zinc-600 cursor-pointer"
-        />
+        <CircleArrowRight className="h-10 w-10" />
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ function pad(num: number, places: number): string {
 }
 
 export default function PlayerProgress(props: PlayerProgressProps) {
-  const [playerState, setPlayerState] = useState(props.playerState);
   const [time, setTime] = useState(
     Math.floor(props.playerState.position / 1000),
   );
@@ -22,7 +21,6 @@ export default function PlayerProgress(props: PlayerProgressProps) {
     const interval = setInterval(async () => {
       const state = await props.player.getCurrentState();
       if (state) {
-        setPlayerState(state);
         setTime(Math.floor(state.position / 1000));
         setMaxTime(Math.floor(state.duration / 1000));
       }
@@ -44,18 +42,23 @@ export default function PlayerProgress(props: PlayerProgressProps) {
     return `${Math.floor(remainingTime() / 60)}:${pad(remainingTime() % 60, 2)}`;
   };
 
+  const progressPercent = maxTime > 0 ? (time / maxTime) * 100 : 0;
+
   return (
     <div className="flex flex-row m-3 items-center">
-      <p className="px-3 custom-mono">{timeString()}</p>
-      <div className="flex flex-start bg-blue-grey-50 w-full h-1.5 rounded-full bg-slate-200/40">
+      <p className="px-3 custom-mono text-sm">{timeString()}</p>
+      <div className="relative flex flex-start bg-slate-200/40 w-full h-1.5 rounded-full group">
         <div
-          className="h-full bg-black rounded-full"
-          style={{
-            width: `${Math.floor((time / maxTime) * 100)}%`,
-          }}
-        ></div>
+          className="h-full bg-black rounded-full transition-all"
+          style={{ width: `${progressPercent}%` }}
+        />
+        <div
+          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-black rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ left: `calc(${progressPercent}% - 6px)` }}
+          aria-hidden="true"
+        />
       </div>
-      <p className="px-3 custom-mono">-{remainingTimeString()}</p>
+      <p className="px-3 custom-mono text-sm">-{remainingTimeString()}</p>
     </div>
   );
 }
