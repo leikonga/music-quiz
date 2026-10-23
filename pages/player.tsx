@@ -45,11 +45,11 @@ const Player: NextPage = () => {
   useEffect(() => {
     if (accessToken) {
       const { pathname, query } = router;
-      query.access_token = accessToken;
       router.replace({
         pathname,
         query: {
           ...query,
+          access_token: accessToken,
         },
       });
     }

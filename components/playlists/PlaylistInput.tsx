@@ -23,6 +23,7 @@ export default function PlaylistInput(props: PlaylistInputProps) {
     if (value === "") {
       const storage = localStorage.getItem("playlist-input");
       if (storage) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setValue(storage);
       }
       return;

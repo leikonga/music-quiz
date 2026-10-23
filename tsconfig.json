@@ -17,23 +17,23 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "types": ["node", "spotify-api", "spotify-web-playback-sdk"],
     "incremental": true,
-    "baseUrl": ".",
     "paths": {
       "@lib/*": [
-        "lib/*"
+        "./lib/*"
       ],
       "@components/*": [
-        "components/*"
+        "./components/*"
       ],
       "@public/*": [
-        "public/*"
+        "./public/*"
       ],
       "@pages/*": [
-        "pages/*"
+        "./pages/*"
       ],
       "@types/*": [
-        "types/*"
+        "./types/*"
       ]
     }
   },
