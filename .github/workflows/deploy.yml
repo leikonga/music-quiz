@@ -4,22 +4,38 @@ on:
   push:
     branches: [main]
 
+env:
+  IMAGE: ghcr.io/leikonga/music-quiz/quiz
+
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm exec tsc --noEmit
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
       - name: docker login
+        run: echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
         env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-        run: |
-          docker login https://docker.pkg.github.com -u $DOCKER_USER -p $DOCKER_PASS
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: docker build
-        run: |
-          docker build . -t docker.pkg.github.com/leikonga/music-quiz/quiz:latest
+        run: docker build . -t "$IMAGE:latest"
       - name: docker push
-        run: |
-          docker push docker.pkg.github.com/leikonga/music-quiz/quiz:latest
+        run: docker push "$IMAGE:latest"
