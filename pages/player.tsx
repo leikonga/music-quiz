@@ -30,6 +30,7 @@ const Player: NextPage = () => {
       const data = await res.json();
 
       if (data.error || !data.access_token) {
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.href = "/api/login";
         return;
       }

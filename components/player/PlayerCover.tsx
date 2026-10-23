@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { usePlayer } from "./PlayerContext";
 import { Disc, Eye } from "lucide-react";
 
@@ -41,10 +42,13 @@ export default function PlayerCover(props: PlayerCoverProps) {
 
   return (
     <div className="w-72 sm:w-44 mx-8">
-      <img
-        className="rounded-md shadow-md"
+      <Image
+        className="rounded-md shadow-md w-full h-auto"
         src={coverUrl}
         alt={props.currentTrack.name}
+        width={640}
+        height={640}
+        unoptimized
       />
     </div>
   );
